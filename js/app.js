@@ -21,7 +21,7 @@
   /* ---------- Blocos ---------- */
   const divider = (theme) => theme === 'deva' ? '<div class="div" aria-hidden="true">✦ . * . ⟡ . * . ✦</div>' : '<div class="div" aria-hidden="true">✦</div>';
   const emblem = (theme) => theme === 'chaos'
-    ? '<img src="assets/chaos-logo.svg" alt="CHAOS" width="260">' : '<img src="assets/deva-simbolo.svg" alt="DEVA" width="400">';
+    ? '<img src="assets/chaos-logo.svg" alt="CHAOS" width="260" height="371" decoding="async">' : '<img src="assets/deva-simbolo.svg" alt="DEVA" width="400" height="400" decoding="async">';
 
   function home(theme, t) {
     const c = t[theme], n = t.nav;
@@ -47,7 +47,8 @@
   async function loadRepos() {
     if (repos) return;
     try { const c = JSON.parse(sessionStorage.getItem('cd-repos') || 'null'); if (c && Date.now() - c.t < 18e5) { repos = c.d; return; } } catch (e) {}
-    const res = await fetch(`https://api.github.com/users/${GH.user}/repos?per_page=100&sort=pushed`, { headers: { Accept: 'application/vnd.github+json' } });
+    const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 8000);
+    const res = await fetch(`https://api.github.com/users/${GH.user}/repos?per_page=100&sort=pushed`, { headers: { Accept: 'application/vnd.github+json' }, signal: ctl.signal }).finally(() => clearTimeout(to));
     if (!res.ok) throw new Error(res.status);
     repos = rank(await res.json());
     try { sessionStorage.setItem('cd-repos', JSON.stringify({ t: Date.now(), d: repos })); } catch (e) {}
@@ -112,7 +113,7 @@
   /* ---------- Portal ---------- */
   function gateHTML(t) {
     return `<div class="gate"><button class="pill lang" id="lang" aria-label="Idioma / Language">${t.langBtn}</button>
-      <h1>ChaosDeva</h1><p>${esc(t.gate.sub)}</p>
+      <h1>CHAOS / DEVA</h1><p>${esc(t.gate.sub)}</p>
       <div class="choices">
         <button class="choice chaos" data-go="chaos"><img src="assets/chaos-simbolo.svg" alt=""><b>CHAOS</b><small>${esc(t.gate.pick)} →</small></button>
         <button class="choice deva" data-go="deva"><img src="assets/deva-sigilo.svg" alt=""><b>DEVA</b><small>${esc(t.gate.pick)} →</small></button>
@@ -139,7 +140,7 @@
     document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en-US';
     if (!r.theme) {
       document.body.removeAttribute('data-theme'); document.body.classList.add('mix');
-      app.innerHTML = gateHTML(t); document.title = 'ChaosDeva';
+      app.innerHTML = gateHTML(t); document.title = 'CHAOS / DEVA';
     } else {
       document.body.setAttribute('data-theme', r.theme); document.body.classList.toggle('mix', r.page === 'marcas');
       const keepShell = current && current.theme === r.theme && current.lang === lang && $('#main');
@@ -147,27 +148,38 @@
         $('#main').innerHTML = views[r.page](r.theme, t);
         document.querySelectorAll('nav a').forEach((a) => a.toggleAttribute('aria-current', a.getAttribute('href') === `#/${r.theme}/${r.page}`));
         document.querySelectorAll('nav a[aria-current]').forEach((a) => a.setAttribute('aria-current', 'page'));
-        const m = $('#main'); m.classList.remove('in'); void m.offsetWidth; m.classList.add('in');
+        const m = $('#main'); m.classList.remove('in', 'out'); void m.offsetWidth; m.classList.add('in');
       } else { app.innerHTML = shell(r.theme, r.page, t); }
-      document.title = `${t.title[r.page]} · ${r.theme.toUpperCase()} · ChaosDeva`;
+      document.title = `${r.theme.toUpperCase()} · ${t.title[r.page]} | CHAOS / DEVA`;
     }
     current = { theme: r.theme, lang };
     if (r.theme && r.page === 'projetos') fillRepos(t);
-    scrollTo(0, 0);
+    scrollTo({ top: 0, behavior: 'instant' });
+    const mm = $('#main'); if (mm && window.__nav) { mm.setAttribute('tabindex', '-1'); mm.focus({ preventScroll: true }); }
+    window.__nav = true;
   }
 
   async function transition(fn, full) {
-    if (full) { veil.classList.add('on'); await wait(400); }
-    else { const m = $('#main'); if (m) { m.classList.remove('in'); m.classList.add('out'); await wait(260); } }
-    fn(); if (full) { await wait(80); veil.classList.remove('on'); }
+    try {
+      if (full) { veil.classList.add('on'); await wait(400); }
+      else { const m = $('#main'); if (m) { m.classList.remove('in'); m.classList.add('out'); await wait(260); } }
+      fn();
+      if (full) await wait(80);
+    } finally { veil.classList.remove('on'); }
   }
 
+  /* Fila: cliques rápidos nunca deixam a URL diferente do conteúdo */
   let busy = false, last = location.hash;
-  window.addEventListener('hashchange', async () => {
+  async function sync() {
     if (busy) return; busy = true;
-    const a = last.split('/')[1] || '', b = location.hash.split('/')[1] || '';
-    await transition(render, a !== b); last = location.hash; busy = false;
-  });
+    try {
+      while (location.hash !== last) {
+        const prev = last; last = location.hash;
+        await transition(render, (prev.split('/')[1] || '') !== (last.split('/')[1] || ''));
+      }
+    } finally { busy = false; }
+  }
+  window.addEventListener('hashchange', sync);
 
   document.addEventListener('click', async (e) => {
     const g = e.target.closest('[data-go]'), s = e.target.closest('#switch'), l = e.target.closest('#lang');
@@ -176,7 +188,8 @@
     if (l && !busy) {
       busy = true; lang = lang === 'pt' ? 'en' : 'pt';
       try { localStorage.setItem('cd-lang', lang); } catch (x) {}
-      await transition(() => { current = null; render(); }, false); busy = false;
+      try { await transition(() => { current = null; render(); }, false); } finally { busy = false; }
+      sync();
     }
   });
 

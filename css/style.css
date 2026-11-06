@@ -27,16 +27,15 @@ a{color:var(--accent);text-underline-offset:3px;transition:color var(--dur)}
 
 /* Céu celestial: mistura das duas paletas */
 #sky{position:fixed;inset:0;z-index:0;pointer-events:none}
-.celestial{position:fixed;inset:0;z-index:-1;
+.celestial{position:fixed;inset:-18%;z-index:-1;will-change:transform;
   background:
-   radial-gradient(ellipse 60% 55% at 15% 10%,rgba(139,92,246,.50),transparent 70%),
-   radial-gradient(ellipse 55% 50% at 88% 18%,rgba(223,177,91,.36),transparent 70%),
-   radial-gradient(ellipse 70% 55% at 50% 105%,rgba(3,105,161,.45),transparent 70%),
-   radial-gradient(ellipse 45% 40% at 95% 85%,rgba(141,169,196,.22),transparent 70%),
+   radial-gradient(ellipse 45% 42% at 22% 18%,rgba(139,92,246,.50),transparent 70%),
+   radial-gradient(ellipse 42% 40% at 80% 24%,rgba(223,177,91,.36),transparent 70%),
+   radial-gradient(ellipse 55% 42% at 50% 92%,rgba(3,105,161,.45),transparent 70%),
+   radial-gradient(ellipse 36% 32% at 88% 78%,rgba(141,169,196,.22),transparent 70%),
    linear-gradient(180deg,#050811 0%,#0a0a18 55%,#000 100%);
-  background-size:140% 140%,140% 140%,140% 140%,140% 140%,100% 100%;
   animation:drift 40s ease-in-out infinite alternate}
-@keyframes drift{from{background-position:0 0,100% 0,50% 100%,100% 100%,0 0}to{background-position:30% 20%,70% 30%,40% 80%,80% 70%,0 0}}
+@keyframes drift{from{transform:translate3d(-3%,-2%,0) rotate(-1.5deg)}to{transform:translate3d(3%,2%,0) rotate(1.5deg)}}
 /* Nas versões, o céu fica sutil sobre o fundo da marca */
 body[data-theme] .celestial{opacity:.22}
 body[data-theme=chaos] .celestial{opacity:.14}
@@ -165,7 +164,7 @@ footer a{color:var(--muted)}footer a:hover{color:var(--accent)}
 
 @media (max-width:860px){.hero,.about,.pair{grid-template-columns:1fr}.hero{min-height:0}.emblem{order:-1}.emblem img{max-height:260px}.ctl{margin-left:0}}
 @media (max-width:600px){.choices{grid-template-columns:1fr;max-width:320px}.choice img{height:110px}nav a{padding:8px 10px}.brand span{display:none}}
-@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+@media (prefers-reduced-motion:reduce){main.out{opacity:1!important;transform:none!important}*,*::before,*::after{animation:none!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 body:not([data-theme]){--surface-2:rgba(5,8,17,.7);--border-hi:rgba(223,177,91,.5);--accent-2:#CBD5E1;--dur:300ms;--glow:0 0 15px rgba(223,177,91,.2);--accent:#DFB15B}
 
 /* Topo: switch e idioma sempre no canto superior direito */
@@ -177,3 +176,6 @@ body:not([data-theme]){--surface-2:rgba(5,8,17,.7);--border-hi:rgba(223,177,91,.
 .tl{padding:12px 0 12px 16px;border-left:1px solid var(--border-hi);position:relative}
 .tl::before{content:"";position:absolute;left:-3px;top:20px;width:5px;height:5px;border-radius:50%;background:var(--accent)}
 .tl .mono{display:block;margin-top:2px}.tl p{margin:.3rem 0 0}
+
+main:focus{outline:none}
+@media (max-width:480px){.gate h1{letter-spacing:.16em;font-size:clamp(1.5rem,8vw,2rem)}.gate{padding-top:72px}}
