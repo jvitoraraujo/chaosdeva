@@ -6,18 +6,20 @@ window.AUTHOR = {
   email: 'vitoraraujo02@gmail.com'
 };
 
-/* SUBSTITUA pelos seus projetos reais. draft:true marca como exemplo. */
-window.PROJECTS = [
-  { name: 'Projeto Alfa', stack: 'Python • FastAPI', status: 'ATIVO', url: 'https://github.com/jvitoraraujo', draft: true,
-    pt: 'Espaço reservado para um projeto de backend. Edite em js/content.js.',
-    en: 'Placeholder for a backend project. Edit it in js/content.js.' },
-  { name: 'Projeto Beta', stack: 'JavaScript • Web', status: 'ATIVO', url: 'https://github.com/jvitoraraujo', draft: true,
-    pt: 'Espaço reservado para uma interface ou extensão.',
-    en: 'Placeholder for an interface or an extension.' },
-  { name: 'Projeto Gama', stack: 'Dados • Análise', status: 'ARQUIVADO', url: 'https://github.com/jvitoraraujo', draft: true,
-    pt: 'Espaço reservado para um estudo de dados ou projeto autoral.',
-    en: 'Placeholder for a data study or an authorial project.' }
-];
+/* Projetos: importados ao vivo de github.com/<user> (API pública) e ranqueados por relevância.
+   pin: nomes de repositórios sempre exibidos primeiro; exclude: nomes a ocultar. */
+window.GH = { user: 'jvitoraraujo', limit: 6, pin: [], exclude: ['chaosdeva', 'jvitoraraujo'] };
+
+/* Bio do "Sobre": preencha o que quiser; campos vazios não aparecem no site.
+   Sugestões: highlights (3 a 4 frases curtas), stack, experience, education, interests, languages.
+   Exemplos de formato (descomente e edite):
+   highlights:[{pt:'Arquitetura de software',en:'Software architecture'}],
+   stack:['Python','TypeScript'],
+   experience:[{role:'Cargo',org:'Empresa',period:'2022 — hoje',pt:'O que você fez.',en:'What you did.'}],
+   education:[{title:'Curso',org:'Instituição',period:'2016 — 2021'}],
+   interests:[{pt:'Jogos autorais',en:'Authorial games'}],
+   languages:[{pt:'Português (nativo)',en:'Portuguese (native)'}] */
+window.PROFILE = { highlights: [], stack: [], experience: [], education: [], interests: [], languages: [] };
 
 window.I18N = {
   pt: {
@@ -46,14 +48,22 @@ window.I18N = {
       contactH: 'Registro de contato', footer: 'DEVA ARCHIVE // PORTFÓLIO', stamp: 'Registro 2026.11'
     },
     marcas: {
-      h: 'Marcas', intro: 'Duas identidades independentes, cada uma com sua própria linguagem. Este portfólio apresenta o mesmo conteúdo sob ambas.',
+      h: 'Marcas', intro: 'Um autor, duas identidades. Entenda o conceito que as reúne e como cada marca funciona.',
+      umbrellaH: 'Marca guarda-chuva', umbrellaP: 'ChaosDeva é o guarda-chuva sob o qual vivem as duas identidades de Vitor Araújo: CHAOS e DEVA. Há um único autor, com os mesmos dados de contato e o mesmo conteúdo, e duas formas distintas de apresentar o trabalho.',
+      howH: 'Como funcionam', how: [
+        { t: 'Independentes', p: 'CHAOS e DEVA são marcas paralelas. Nenhuma é submarca da outra, e logos, cores e ornamentos nunca se misturam.' },
+        { t: 'Escolha por projeto', p: 'Em cada projeto, o autor decide qual marca vale. O conteúdo é o mesmo; mudam a linguagem visual e o tom.' },
+        { t: 'Intensidade', p: 'O quanto da estética aparece depende do projeto: baixa (10–20%) em ferramentas e APIs, média (40–50%) em sites e interfaces, alta (70–90%) em jogos e obras autorais.' }],
+      brandsH: 'As marcas',
       chaos: { h: 'CHAOS', p1: 'Inspirada em Caos, divindade primordial da tradição greco-romana: a massa informe e confusa onde terra, ar, água e fogo existiam em eterno conflito.',
         p2: 'Estética gótica e etérea: abismo negro, violeta ametista e luz de lua. O mistério mora nos títulos; a precisão mora no conteúdo.', pal: 'Paleta' },
-      deva: { h: 'DEVA', p1: 'Uma marca guarda-chuva e cartografia do conhecimento, que une misticismo, dados e tecnologia. Cada projeto é uma constelação do mesmo céu.',
+      deva: { h: 'DEVA', p1: 'Uma cartografia do conhecimento que une misticismo, dados e tecnologia. Cada projeto é uma constelação do mesmo céu.',
         p2: 'Estética de cosmos e pergaminho: azul profundo, ouro estelar e azul celestial. A estética é mística; a execução é de engenharia.', pal: 'Paleta' },
       note: 'As marcas são paralelas: nenhuma é submarca da outra, e cada versão do site usa apenas a sua própria linguagem.'
     },
-    status: { ATIVO: 'ATIVO', ARQUIVADO: 'ARQUIVADO' }, draft: 'Exemplo', repo: 'Ver no GitHub', contactBack: 'GitHub, LinkedIn e e-mail'
+    loading: 'Importando projetos do GitHub…', failed: 'Não foi possível carregar os projetos agora.', allRepos: 'Todos os repositórios', noDesc: 'Sem descrição.', updated: 'Atualizado em',
+    profile: { highlights: 'Em destaque', stack: 'Stack', experience: 'Trajetória', education: 'Formação', interests: 'Interesses', languages: 'Idiomas' },
+    repo: 'Ver no GitHub'
   },
   en: {
     langBtn: 'PT-BR', switchTo: { chaos: 'DEVA', deva: 'CHAOS' },
@@ -81,13 +91,21 @@ window.I18N = {
       contactH: 'Contact record', footer: 'DEVA ARCHIVE // PORTFOLIO', stamp: 'Record 2026.11'
     },
     marcas: {
-      h: 'Brands', intro: 'Two independent identities, each with its own language. This portfolio presents the same content under both.',
+      h: 'Brands', intro: 'One author, two identities. Understand the concept that unites them and how each brand works.',
+      umbrellaH: 'Umbrella brand', umbrellaP: 'ChaosDeva is the umbrella under which Vitor Araújo\'s two identities live: CHAOS and DEVA. There is a single author, with the same contact details and the same content, and two distinct ways of presenting the work.',
+      howH: 'How they work', how: [
+        { t: 'Independent', p: 'CHAOS and DEVA are parallel brands. Neither is a sub-brand of the other, and logos, colors and ornaments never mix.' },
+        { t: 'Chosen per project', p: 'For each project, the author decides which brand applies. The content is the same; the visual language and tone change.' },
+        { t: 'Intensity', p: 'How much of the aesthetic shows depends on the project: low (10–20%) for tools and APIs, medium (40–50%) for sites and interfaces, high (70–90%) for games and authorial works.' }],
+      brandsH: 'The brands',
       chaos: { h: 'CHAOS', p1: 'Inspired by Chaos, the primordial deity of the Greco-Roman tradition: the formless, confused mass where earth, air, water and fire lay in eternal conflict.',
         p2: 'A gothic, ethereal aesthetic: black abyss, amethyst violet and moonlight. Mystery lives in the titles; precision lives in the content.', pal: 'Palette' },
-      deva: { h: 'DEVA', p1: 'An umbrella brand and cartography of knowledge, uniting mysticism, data and technology. Each project is a constellation of the same sky.',
+      deva: { h: 'DEVA', p1: 'A cartography of knowledge uniting mysticism, data and technology. Each project is a constellation of the same sky.',
         p2: 'A cosmos-and-parchment aesthetic: deep navy, stellar gold and celestial blue. The aesthetic is mystical; the execution is engineering.', pal: 'Palette' },
       note: 'The brands are parallel: neither is a sub-brand of the other, and each version of the site uses only its own language.'
     },
-    status: { ATIVO: 'ACTIVE', ARQUIVADO: 'ARCHIVED' }, draft: 'Sample', repo: 'View on GitHub', contactBack: 'GitHub, LinkedIn and e-mail'
+    loading: 'Importing projects from GitHub…', failed: 'Could not load projects right now.', allRepos: 'All repositories', noDesc: 'No description.', updated: 'Updated',
+    profile: { highlights: 'Highlights', stack: 'Stack', experience: 'Background', education: 'Education', interests: 'Interests', languages: 'Languages' },
+    repo: 'View on GitHub'
   }
 };

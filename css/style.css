@@ -167,3 +167,13 @@ footer a{color:var(--muted)}footer a:hover{color:var(--accent)}
 @media (max-width:600px){.choices{grid-template-columns:1fr;max-width:320px}.choice img{height:110px}nav a{padding:8px 10px}.brand span{display:none}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 body:not([data-theme]){--surface-2:rgba(5,8,17,.7);--border-hi:rgba(223,177,91,.5);--accent-2:#CBD5E1;--dur:300ms;--glow:0 0 15px rgba(223,177,91,.2);--accent:#DFB15B}
+
+/* Topo: switch e idioma sempre no canto superior direito */
+.top{justify-content:flex-start}.brand{order:1}nav{order:2}.ctl{order:3;margin-left:auto}
+@media (max-width:860px){.brand{margin-right:auto}nav{order:4;flex:0 0 100%;overflow-x:auto;flex-wrap:nowrap}.ctl{margin-left:0}}
+@media (max-width:420px){.pill{padding:.5rem .7rem;font-size:.7rem}}
+/* Perfil (Sobre) */
+.plain{margin:0;padding-left:1.1rem;color:var(--muted)}.plain li{margin:.25rem 0}
+.tl{padding:12px 0 12px 16px;border-left:1px solid var(--border-hi);position:relative}
+.tl::before{content:"";position:absolute;left:-3px;top:20px;width:5px;height:5px;border-radius:50%;background:var(--accent)}
+.tl .mono{display:block;margin-top:2px}.tl p{margin:.3rem 0 0}

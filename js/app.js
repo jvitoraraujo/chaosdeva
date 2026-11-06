@@ -33,18 +33,61 @@
     <section><h2>${esc(n.marcas)}</h2><p class="muted">${esc(t.marcas.intro)}</p><a class="btn ghost" href="#/${theme}/marcas">${esc(n.marcas)}</a></section>`;
   }
 
+  /* Projetos importados do GitHub */
+  const GH = window.GH; let repos = null;
+  const rank = (all) => {
+    const ex = GH.exclude.map((x) => x.toLowerCase()), now = Date.now();
+    const score = (r) => {
+      const months = (now - new Date(r.pushed_at)) / 2.63e9;
+      return (GH.pin.includes(r.name) ? 100 : 0) + r.stargazers_count * 4 + r.forks_count * 3 + (r.homepage ? 2 : 0) + (r.description ? 2 : 0) + (months <= 6 ? 3 : months <= 12 ? 1 : 0);
+    };
+    return all.filter((r) => !r.fork && !r.archived && !r.disabled && !ex.includes(r.name.toLowerCase()))
+      .sort((x, y) => score(y) - score(x) || new Date(y.pushed_at) - new Date(x.pushed_at)).slice(0, GH.limit);
+  };
+  async function loadRepos() {
+    if (repos) return;
+    try { const c = JSON.parse(sessionStorage.getItem('cd-repos') || 'null'); if (c && Date.now() - c.t < 18e5) { repos = c.d; return; } } catch (e) {}
+    const res = await fetch(`https://api.github.com/users/${GH.user}/repos?per_page=100&sort=pushed`, { headers: { Accept: 'application/vnd.github+json' } });
+    if (!res.ok) throw new Error(res.status);
+    repos = rank(await res.json());
+    try { sessionStorage.setItem('cd-repos', JSON.stringify({ t: Date.now(), d: repos })); } catch (e) {}
+  }
+  const repoCards = (t) => repos.length ? repos.map((r) => {
+    const tags = [r.language, ...(r.topics || []).slice(0, 2)].filter(Boolean).map((x) => `<span class="tag">${esc(x)}</span>`).join('');
+    const star = r.stargazers_count ? `<span class="tag">★ ${r.stargazers_count}</span>` : '';
+    const date = new Date(r.pushed_at).toLocaleDateString(lang === 'pt' ? 'pt-BR' : 'en-US', { month: 'short', year: 'numeric' });
+    return `<article class="card"><h3 class="t">${esc(r.name)}</h3><p class="muted">${esc(r.description || t.noDesc)}</p>
+      <div class="tags">${tags}${star}</div><p class="mono" style="margin:12px 0 0">${esc(t.updated)} ${esc(date)}</p>
+      <a class="more" href="${esc(r.html_url)}" target="_blank" rel="noopener">${esc(t.repo)} →</a>${r.homepage && /^https?:/.test(r.homepage) ? ` <a class="more" style="margin-left:14px" href="${esc(r.homepage)}" target="_blank" rel="noopener">Demo →</a>` : ''}</article>`;
+  }).join('') : `<p class="muted">${esc(t.failed)}</p>`;
+  async function fillRepos(t) {
+    const box = () => $('#repos');
+    try { await loadRepos(); if (box()) box().innerHTML = repoCards(t); }
+    catch (e) { if (box()) box().innerHTML = `<p class="muted">${esc(t.failed)}</p>`; }
+  }
   function projetos(theme, t) {
     const c = t[theme];
-    const cards = window.PROJECTS.map((p) => `<article class="card"><h3 class="t">${esc(p.name)}</h3><p class="muted">${esc(p[lang])}</p>
-      <div class="tags"><span class="tag">${esc(p.stack)}</span><span class="tag state">${esc(t.status[p.status] || p.status)}</span>${p.draft ? `<span class="tag draft">${esc(t.draft)}</span>` : ''}</div>
-      <a class="more" href="${esc(p.url)}" target="_blank" rel="noopener">${esc(t.repo)} →</a></article>`).join('');
-    return `<h1>${esc(c.projH)}</h1><p class="lead muted">${esc(c.projP)}</p>${divider(theme)}<div class="grid">${cards}</div>`;
+    return `<h1>${esc(c.projH)}</h1><p class="lead muted">${esc(c.projP)}</p>${divider(theme)}
+      <div class="grid" id="repos" aria-live="polite">${repos ? repoCards(t) : `<p class="muted">${esc(t.loading)}</p>`}</div>
+      <p style="margin-top:28px"><a class="btn ghost" href="${A.github}?tab=repositories" target="_blank" rel="noopener">${esc(t.allRepos)} →</a></p>`;
   }
 
+  function profile(t) {
+    const P = window.PROFILE, L = t.profile, out = [];
+    const sec = (k, body) => out.push(`<h3 style="margin-top:28px">${esc(L[k])}</h3>${body}`);
+    const list = (arr) => `<ul class="plain">${arr.map((x) => `<li>${esc(x[lang] || x)}</li>`).join('')}</ul>`;
+    if (P.highlights.length) sec('highlights', list(P.highlights));
+    if (P.stack.length) sec('stack', `<div class="tags">${P.stack.map((x) => `<span class="tag">${esc(x)}</span>`).join('')}</div>`);
+    if (P.experience.length) sec('experience', P.experience.map((e) => `<div class="tl"><b>${esc(e.role)}</b> · ${esc(e.org)}<span class="mono">${esc(e.period)}</span><p class="muted">${esc(e[lang] || '')}</p></div>`).join(''));
+    if (P.education.length) sec('education', P.education.map((e) => `<div class="tl"><b>${esc(e.title)}</b> · ${esc(e.org)}<span class="mono">${esc(e.period)}</span></div>`).join(''));
+    if (P.interests.length) sec('interests', list(P.interests));
+    if (P.languages.length) sec('languages', list(P.languages));
+    return out.join('');
+  }
   function sobre(theme, t) {
     const c = t[theme];
     return `<h1>${esc(c.aboutH)}</h1>${divider(theme)}<div class="about"><div><p>${esc(c.aboutP1)}</p><p class="muted">${esc(c.aboutP2)}</p>
-      <p class="mono">${esc(c.role)}</p></div><div><h3>${esc(c.contactH)}</h3><ul class="links">
+      <p class="mono">${esc(c.role)}</p>${profile(t)}</div><div><h3>${esc(c.contactH)}</h3><ul class="links">
       <li><a href="${A.github}" target="_blank" rel="noopener">GitHub<span>jvitoraraujo</span></a></li>
       <li><a href="${A.linkedin}" target="_blank" rel="noopener">LinkedIn<span>Vitor Araújo</span></a></li>
       <li><a href="mailto:${A.email}">E-mail<span>${A.email}</span></a></li></ul></div></div>`;
@@ -55,7 +98,11 @@
     const m = t.marcas;
     const panel = (k, logo, pal) => `<article class="panel" data-theme="${k}"><div class="logo"><img src="${logo}" alt="${m[k].h}"></div>
       <h2>${m[k].h}</h2><p>${esc(m[k].p1)}</p><p class="muted">${esc(m[k].p2)}</p><h3>${esc(m[k].pal)}</h3>${sw(pal)}</article>`;
-    return `<h1>${esc(m.h)}</h1><p class="lead muted">${esc(m.intro)}</p><div class="pair">
+    const how = m.how.map((x) => `<article class="card"><h3 class="t">${esc(x.t)}</h3><p class="muted">${esc(x.p)}</p></article>`).join('');
+    return `<h1>${esc(m.h)}</h1><p class="lead muted">${esc(m.intro)}</p>
+      <section style="margin-top:32px"><h2>${esc(m.umbrellaH)}</h2><p>${esc(m.umbrellaP)}</p></section>
+      <section style="margin-top:32px"><h3>${esc(m.howH)}</h3><div class="grid">${how}</div></section>${divider(theme)}
+      <h2>${esc(m.brandsH)}</h2><div class="pair">
       ${panel('chaos', 'assets/chaos-simbolo.svg', [['Void', '#000000'], ['Dust', '#111418'], ['Moonlight', '#E0E6ED'], ['Amethyst', '#8B5CF6'], ['Nebula', '#0369A1']])}
       ${panel('deva', 'assets/deva-sigilo.svg', [['Canvas', '#050811'], ['Surface', '#0B111E'], ['Parchment', '#E2E8F0'], ['Gold', '#DFB15B'], ['Celestial', '#8DA9C4']])}
     </div><p class="note">${esc(m.note)}</p>`;
@@ -90,10 +137,9 @@
   function render() {
     const r = route(), t = window.I18N[lang];
     document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en-US';
-    const fav = $('#fav');
     if (!r.theme) {
       document.body.removeAttribute('data-theme'); document.body.classList.add('mix');
-      app.innerHTML = gateHTML(t); document.title = 'ChaosDeva'; fav.href = 'assets/deva-sigilo.svg';
+      app.innerHTML = gateHTML(t); document.title = 'ChaosDeva';
     } else {
       document.body.setAttribute('data-theme', r.theme); document.body.classList.toggle('mix', r.page === 'marcas');
       const keepShell = current && current.theme === r.theme && current.lang === lang && $('#main');
@@ -104,9 +150,9 @@
         const m = $('#main'); m.classList.remove('in'); void m.offsetWidth; m.classList.add('in');
       } else { app.innerHTML = shell(r.theme, r.page, t); }
       document.title = `${t.title[r.page]} · ${r.theme.toUpperCase()} · ChaosDeva`;
-      fav.href = r.theme === 'chaos' ? 'assets/chaos-simbolo.svg' : 'assets/deva-sigilo.svg';
     }
     current = { theme: r.theme, lang };
+    if (r.theme && r.page === 'projetos') fillRepos(t);
     scrollTo(0, 0);
   }
 
