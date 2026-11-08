@@ -28,9 +28,21 @@
     return `<section class="hero"><div>
       <p class="role">${esc(c.role)}</p><h1>${esc(A.name)}</h1><p class="lead">${esc(c.lead)}</p>
       ${theme === 'chaos' ? `<p class="tagline">${esc(c.tagline)}</p>` : `<p class="mono" style="margin-top:20px">${esc(c.tagline)}</p>`}
-      <div class="actions"><a class="btn primary" href="#/${theme}/projetos">${esc(c.cta1)}</a><a class="btn ghost" href="#/${theme}/sobre">${esc(c.cta2)}</a></div>
-    </div><div class="emblem">${emblem(theme)}</div></section>${divider(theme)}
-    <section><h2>${esc(n.marcas)}</h2><p class="muted">${esc(t.marcas.intro)}</p><a class="btn ghost" href="#/${theme}/marcas">${esc(n.marcas)}</a></section>`;
+      <div class="home-terminal mono">
+        <div>${esc(c.termL1)}</div>
+        <div>${esc(c.termL2)}</div>
+        <div>${esc(c.termL3)}</div>
+        <div>${esc(c.termL4)}</div>
+        <div>${esc(c.termL5)}</div>
+        <div>${esc(c.termL6)}</div>
+      </div>
+      <div class="home-tags">
+        <span class="mono">${esc(c.tagsLabel)}</span>
+        <div class="tags">
+          ${c.tags.map(tag => `<span class="tag">${esc(tag)}</span>`).join('')}
+        </div>
+      </div>
+    </div><div class="emblem">${emblem(theme)}</div></section>${divider(theme)}`;
   }
 
   /* Projetos importados do GitHub */
@@ -106,7 +118,7 @@
       <h2>${esc(m.brandsH)}</h2><div class="pair">
       ${panel('chaos', 'assets/chaos-simbolo.svg', [['Void', '#000000'], ['Dust', '#111418'], ['Moonlight', '#E0E6ED'], ['Amethyst', '#8B5CF6'], ['Nebula', '#0369A1']])}
       ${panel('deva', 'assets/deva-sigilo.svg', [['Canvas', '#050811'], ['Surface', '#0B111E'], ['Parchment', '#E2E8F0'], ['Gold', '#DFB15B'], ['Celestial', '#8DA9C4']])}
-    </div><p class="note">${esc(m.note)}</p>`;
+    </div>`;
   }
   const views = { home, projetos, sobre, marcas };
 
@@ -127,7 +139,7 @@
     const other = theme === 'chaos' ? 'deva' : 'chaos';
     const foot = theme === 'deva' ? `${t.deva.footer} &nbsp;·&nbsp; ${t.deva.stamp}` : `${t.chaos.footer}`;
     return `<header class="top"><a class="brand" href="#/${theme}/home"><img src="${logo}" alt=""><span>${theme.toUpperCase()}</span></a>
-      <nav aria-label="Principal">${nav}</nav><div class="ctl">
+      <nav aria-label="${esc(t.navLabel)}">${nav}</nav><div class="ctl">
       <button class="pill switch" id="switch" aria-label="${theme.toUpperCase()} → ${other.toUpperCase()}">${theme.toUpperCase()} <i>⇄</i> ${other.toUpperCase()}</button>
       <button class="pill" id="lang" aria-label="Idioma / Language">${t.langBtn}</button></div></header>
       <main id="main" class="in">${views[page](theme, t)}</main>
@@ -193,20 +205,48 @@
     }
   });
 
-  /* ---------- Céu estrelado (decorativo) ---------- */
+  /* ---------- Céu estrelado (decorativo, com parallax sutil ao mover o mouse) ---------- */
   (function sky() {
-    const c = $('#sky'), x = c.getContext('2d'); let w, h, stars = [];
-    const size = () => {
-      w = c.width = innerWidth; h = c.height = innerHeight;
-      const hue = ['#E0E6ED', '#8DA9C4', '#DFB15B', '#A78BFA'];
-      stars = Array.from({ length: Math.min(160, Math.floor(w * h / 9000)) }, () => ({ x: Math.random() * w, y: Math.random() * h, r: Math.random() * 1.2 + .3, p: Math.random() * 6.28, c: hue[Math.floor(Math.random() * 4)] }));
+    const c = $('#sky'), x = c.getContext('2d');
+    let w = 0, h = 0, stars = [], mx = 0, my = 0, tx = 0, ty = 0;
+    const wrap = (v, m) => ((v % m) + m) % m;
+
+    if (!reduce) {
+      addEventListener('mousemove', (e) => {
+        tx = (e.clientX - innerWidth / 2) * 0.04;
+        ty = (e.clientY - innerHeight / 2) * 0.04;
+      });
+    }
+
+    const paint = (tm) => {
+      x.clearRect(0, 0, w, h);
+      stars.forEach((s) => {
+        x.globalAlpha = reduce ? .5 : .25 + .45 * Math.abs(Math.sin(tm / 2400 + s.p));
+        x.fillStyle = s.c;
+        x.beginPath();
+        /* wrap: estrelas deslocadas pelo parallax reentram pela borda oposta, sem faixas vazias */
+        x.arc(wrap(s.x - mx * s.r * 1.5, w), wrap(s.y - my * s.r * 1.5, h), s.r, 0, 6.28);
+        x.fill();
+      });
     };
     const draw = (tm) => {
-      x.clearRect(0, 0, w, h);
-      stars.forEach((s) => { x.globalAlpha = reduce ? .5 : .25 + .45 * Math.abs(Math.sin(tm / 2400 + s.p)); x.fillStyle = s.c; x.beginPath(); x.arc(s.x, s.y, s.r, 0, 6.28); x.fill(); });
+      mx += (tx - mx) * 0.05;
+      my += (ty - my) * 0.05;
+      paint(tm);
       if (!reduce) requestAnimationFrame(draw);
     };
-    addEventListener('resize', size); size(); requestAnimationFrame(draw);
+    const size = () => {
+      const nw = innerWidth, nh = innerHeight;
+      /* Só recria as estrelas se a largura mudar ou a altura variar muito (evita "piscar" quando a barra do navegador mobile some/aparece) */
+      const regen = !stars.length || nw !== w || Math.abs(nh - h) > 150;
+      w = c.width = nw; h = c.height = nh;
+      if (regen) {
+        const hue = ['#E0E6ED', '#8DA9C4', '#DFB15B', '#A78BFA'];
+        stars = Array.from({ length: Math.min(160, Math.floor(w * h / 9000)) }, () => ({ x: Math.random() * w, y: Math.random() * h, r: Math.random() * 1.2 + .3, p: Math.random() * 6.28, c: hue[Math.floor(Math.random() * 4)] }));
+      }
+      if (reduce) paint(0); /* sem animação, o redimensionamento limpa o canvas: repinta uma vez */
+    };
+    addEventListener('resize', size); size(); if (!reduce) requestAnimationFrame(draw);
   })();
 
   render();
