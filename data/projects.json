@@ -1,1 +1,50 @@
-{ "generated": null, "repos": [] }
+{
+  "generated": "2026-11-09T21:48:51.546Z",
+  "user": "jvitoraraujo",
+  "repos": [
+    {
+      "name": "SakuraPlanet",
+      "description": "Projeto de fanblog atulizado (2026)",
+      "language": null,
+      "topics": [],
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "html_url": "https://github.com/jvitoraraujo/SakuraPlanet",
+      "homepage": null,
+      "pushed_at": "2026-11-08T21:28:55Z"
+    },
+    {
+      "name": "PD26.1-TB2",
+      "description": "Sistema de agendamento Medico: segunda parte do trabalho de Persistência de Dados. ",
+      "language": "Python",
+      "topics": [],
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "html_url": "https://github.com/jvitoraraujo/PD26.1-TB2",
+      "homepage": "",
+      "pushed_at": "2026-11-08T19:23:42Z"
+    },
+    {
+      "name": "ArcanumVitae",
+      "description": "Jogo de tabuleiro híbrido (físico/digital) desenvolvido em Flutter, inspirado nos 22 Arcanos Maiores do Tarô e na Árvore da Vida da Cabala.",
+      "language": "C++",
+      "topics": [],
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "html_url": "https://github.com/jvitoraraujo/ArcanumVitae",
+      "homepage": "",
+      "pushed_at": "2026-11-08T15:58:43Z"
+    },
+    {
+      "name": "Deva-PDF2EPUB",
+      "description": "Ferramenta voltada para a conversão de arquivos PDF em formato EPUB: Layout fluido · sem hifenização de quebra de linha · OCR · revisão opcional por IA",
+      "language": "JavaScript",
+      "topics": [],
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "html_url": "https://github.com/jvitoraraujo/Deva-PDF2EPUB",
+      "homepage": "",
+      "pushed_at": "2026-11-06T18:43:58Z"
+    }
+  ]
+}
