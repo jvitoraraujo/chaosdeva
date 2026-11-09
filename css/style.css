@@ -217,3 +217,9 @@ main p:not(.mono):not(.role):not(.tagline){text-align:justify;text-justify:inter
 .choice b{display:flex;align-items:center;min-height:36px}
 
 .choice.deva b{font-size:1.85rem;line-height:1;font-weight:700}
+
+/* Evita distorção: width/height do HTML são só reserva de espaço; proporção natural sempre preservada */
+.emblem img,.choice img,.panel .logo img,.brand img{width:auto;height:auto}
+.emblem img{max-width:100%}
+.choice img{height:150px}.choice img.wm{height:36px}.panel .logo img{height:100%}.brand img{height:34px}
+@media (max-width:600px){.choice img{height:110px}.choice img.wm{height:36px}}

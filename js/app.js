@@ -21,7 +21,7 @@
   /* ---------- Blocos ---------- */
   const divider = (theme) => theme === 'deva' ? '<div class="div" aria-hidden="true">✦ . * . ⟡ . * . ✦</div>' : '<div class="div" aria-hidden="true">✦</div>';
   const emblem = (theme) => theme === 'chaos'
-    ? '<img src="assets/chaos-logo.svg" alt="CHAOS" width="260" height="371" decoding="async">' : '<img src="assets/deva-lockup-vertical.png" alt="DEVA" width="420" height="366" decoding="async">';
+    ? '<img src="assets/chaos-logo.svg" alt="CHAOS" width="260" height="371" decoding="async">' : '<img src="assets/deva-lockup-vertical.png" alt="DEVA" width="420" height="362" decoding="async">';
 
   function home(theme, t) {
     const c = t[theme], n = t.nav;
