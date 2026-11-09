@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jvitoraraujo.github.io/chaosdeva/sitemap.xml

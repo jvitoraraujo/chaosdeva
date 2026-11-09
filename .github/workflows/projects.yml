@@ -1,0 +1,25 @@
+name: Atualizar projetos
+on:
+  schedule:
+    - cron: '17 6 * * *'        # todo dia, 06:17 UTC
+  workflow_dispatch:            # botão "Run workflow" na aba Actions
+  push:
+    branches: [main]
+    paths: ['js/content.js', 'js/rank.js', 'scripts/**']
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: node scripts/build-projects.mjs
+        env: { GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}' }
+      - name: Publicar data/projects.json se mudou
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/projects.json
+          git diff --cached --quiet || (git commit -m "chore: atualizar projects.json" && git push)

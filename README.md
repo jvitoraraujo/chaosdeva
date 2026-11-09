@@ -1,72 +1,61 @@
-<div align="center">
-<h1>Chaos / Deva</h1>
-<p><strong>Portfólio estático (GitHub Pages) em duas identidades: CHAOS e DEVA.</strong></p>
-<p><strong>Um ecossistema digital moderno combinando estética, interatividade e inovação.</strong></p>
-</div>
+# CHAOS / DEVA
 
-<div align="center">
-  <img src="assets/chaos-simbolo.svg" alt="Chaos / Deva Logo" width="180" height="180">
-  <img src="assets/deva-simbolo.svg" alt="Chaos / Deva Logo" width="140" height="140">
-  
-</div>
+Portfólio estático (GitHub Pages) de Vitor Araújo, em duas identidades visuais independentes: **CHAOS** e **DEVA**.
+Mesmo conteúdo, duas estéticas, dois idiomas (PT-BR / EN-US) e um portal de seleção.
 
-<br>
+**Site:** https://jvitoraraujo.github.io/chaosdeva/
 
----
+## Estrutura
 
-## 📋 Sobre o Projeto
-
-O **Chaos / Deva** é um projeto de portfólio web, moderno estruturado com uma arquitetura limpa e organizada. Utilizando tecnologias web padrão (`HTML5`, `CSS3` e `JavaScript Vanilla`), a aplicação oferece uma experiência visual imersiva com ativos customizados (logos, símbolos, wordmarks e ícones de alta resolução).
-
-🔗 **Acesse a página do projeto:** [https://jvitoraraujo.github.io/chaosdeva/](https://jvitoraraujo.github.io/chaosdeva/)
-
----
-
-## 🗂️ Estrutura do Repositório
-
-Abaixo está a organização dos principais diretórios e arquivos que compõem o repositório:
-
-```text
-chaosdeva/
-├── 404.html               # Página de erro personalizada
-├── index.html             # Página principal da aplicação
-├── .nojekyll              # Configuração para deploy no GitHub Pages
-├── README.md              # Documentação do projeto
-├── assets/                # Recursos visuais e gráficos
-│   ├── chaos-logo.svg
-│   ├── chaos-simbolo.svg
-│   ├── chaos-wordmark.svg
-│   ├── deva-sigilo.svg
-│   ├── deva-simbolo.svg
-│   ├── deva-wordmark.svg
-│   └── icons/             # Favicons e ícones (de 16px a 1024px)
-├── LICENSE                # Direitos reservados
-├── css/
-│   └── style.css          # Estilos globais e customizados
-└── js/
-    ├── app.js             # Lógica principal de execução
-    └── content.js         # Gerenciamento de conteúdo e dados dinâmicos
+```
+├── index.html              # Página única (SPA com rotas por hash: #/chaos/home, #/deva/projetos…)
+├── css/style.css           # Tokens CHAOS e DEVA escopados por [data-theme]
+├── js/
+│   ├── content.js          # TODO o conteúdo editável (textos PT/EN, bio, configuração dos projetos)
+│   ├── rank.js             # Ranqueamento dos repositórios (usado pelo site e pela Action)
+│   └── app.js              # Rotas, temas, idioma, transições e céu estrelado
+├── assets/                 # Logos oficiais (SVG otimizados), og-image.jpg e icons/ (favicon CD)
+├── data/projects.json      # Gerado pela Action; o site o lê primeiro
+├── scripts/build-projects.mjs
+├── tests/smoke.py          # Teste de fumaça (36 verificações)
+├── .github/workflows/      # projects.yml (atualiza projetos) e smoke.yml (testes)
+├── manifest.webmanifest · robots.txt · sitemap.xml · 404.html · LICENSE
 ```
 
----
+## Publicar
 
-## 🚀 Tecnologias Utilizadas
+1. Envie todo o conteúdo para o repositório `chaosdeva` (inclusive `.nojekyll` e `.github/`).
+2. *Settings → Pages → Deploy from a branch → main → / (root)*.
+3. Em *Settings → Actions → General → Workflow permissions*, marque **Read and write permissions** (a Action grava `data/projects.json`).
+4. Em *Actions → Atualizar projetos → Run workflow*, rode uma vez para gerar os projetos. Depois ela roda todo dia sozinha.
 
-* **HTML5:** Marcação semântica e estruturação da página.
-* **CSS3:** Estilização responsiva e efeitos visuais modernos.
-* **JavaScript (ES6+):** Manipulação de estado, interatividade e carregamento de conteúdo dinâmico (`app.js` e `content.js`).
-* **SVG:** Vetores escaláveis de alta qualidade para logotipos e símbolos.
+## Como editar
 
----
+| O quê | Onde |
+|---|---|
+| Textos, bios, rodapé, idiomas | `js/content.js` (PT-BR e EN-US lado a lado) |
+| Projetos exibidos | Automático: os 6 repositórios próprios mais relevantes (sem forks e arquivados). Ajuste `GH.limit`, `GH.pin` (fixar) e `GH.exclude` (ocultar) em `js/content.js` |
+| Capa de um projeto | `GH.covers = { 'nome-do-repo': 'assets/covers/nome.webp' }` |
+| Bio extra (stack, trajetória, formação…) | Objeto `PROFILE` em `js/content.js`; campos vazios não aparecem |
+| Aparência | `css/style.css` |
 
-## 📄 Licença
+**Projetos:** o site lê `data/projects.json` (rápido, sem limite de requisições). Se o arquivo ainda não foi gerado, usa a API pública do GitHub como reserva, com cache de 30 minutos.
+
+## Testes
+
+```bash
+pip install playwright && playwright install chromium
+python tests/smoke.py
+```
+
+Abre as 9 rotas em desktop e celular, nos dois idiomas, e falha se houver erro de JavaScript, título vazio, imagem quebrada ou rolagem horizontal. Também roda no GitHub a cada push.
+
+## Fontes (Google Fonts)
+
+As fontes (Cinzel, Cinzel Decorative, Inter, JetBrains Mono) são carregadas do Google sem bloquear a página, só nos pesos usados. Para hospedá-las no próprio repositório (mais rápido e sem enviar o IP do visitante ao Google), baixe os `.woff2` desses pesos, coloque em `assets/fonts/`, declare-os com `@font-face` no início de `css/style.css` e remova os links do Google em `index.html`.
+
+## Licença
 
 © CHAOS / DEVA - 2026. Todos os direitos reservados.
 
-O código, os textos e as identidades visuais (logos, símbolos, wordmarks e ícones) deste repositório não podem ser copiados, modificados ou redistribuídos sem autorização expressa do autor. Veja o arquivo [`LICENSE`](LICENSE).
-
----
-
-<div align="center">
-  <p>✦ . * Feito com dedicação para os universos Chaos & Deva * . ✦</p>
-</div>
+O código, os textos e as identidades visuais (logos, símbolos, wordmarks e ícones) deste repositório não podem ser copiados, modificados ou redistribuídos sem autorização expressa do autor. Veja [`LICENSE`](LICENSE).

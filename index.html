@@ -7,28 +7,44 @@
 <meta name="theme-color" content="#050811">
 <title>CHAOS / DEVA</title>
 <meta name="description" content="Portfólio de Vitor Araújo em duas identidades: CHAOS e DEVA. / Portfolio in two identities: CHAOS and DEVA.">
-<meta property="og:title" content="CHAOS / DEVA">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://jvitoraraujo.github.io/chaosdeva/">
 <link rel="canonical" href="https://jvitoraraujo.github.io/chaosdeva/">
-<meta property="og:image" content="https://jvitoraraujo.github.io/chaosdeva/assets/icons/cd-512.png">
-<meta property="og:description" content="Portfólio de Vitor Araújo · CHAOS &amp; DEVA">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="CHAOS / DEVA">
+<meta property="og:title" content="CHAOS / DEVA">
+<meta property="og:description" content="Portfólio de Vitor Araújo · CHAOS & DEVA">
+<meta property="og:url" content="https://jvitoraraujo.github.io/chaosdeva/">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:image" content="https://jvitoraraujo.github.io/chaosdeva/assets/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CHAOS / DEVA">
+<meta name="twitter:description" content="Portfólio de Vitor Araújo · CHAOS & DEVA">
+<meta name="twitter:image" content="https://jvitoraraujo.github.io/chaosdeva/assets/og-image.jpg">
 <link rel="icon" href="assets/icons/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/cd-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/cd-192.png">
 <link rel="apple-touch-icon" href="assets/icons/cd-180.png">
+<link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<!-- Fontes carregadas sem bloquear a renderização; só os pesos usados -->
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cinzel+Decorative:wght@700&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cinzel+Decorative:wght@700&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="mix">
 <div class="celestial" aria-hidden="true"></div>
 <canvas id="sky" aria-hidden="true"></canvas>
 <div id="veil" aria-hidden="true"></div>
-<div id="app"></div>
-<noscript><p style="position:relative;z-index:2;color:#E2E8F0;text-align:center;padding:40px">Este portfólio requer JavaScript. / This portfolio requires JavaScript.</p></noscript>
+<!-- Conteúdo inicial estático (buscadores e quem está sem JavaScript); o app o substitui ao carregar -->
+<div id="app"><div class="boot"><h1>CHAOS / DEVA</h1>
+<p>Portfólio de Vitor Araújo · Software Architecture &amp; Digital Crafts</p>
+<p><a href="https://github.com/jvitoraraujo">GitHub</a> · <a href="https://www.linkedin.com/in/vitor-ara%C3%BAjo-55a98942b">LinkedIn</a></p>
+<noscript><p>Este portfólio requer JavaScript. / This portfolio requires JavaScript.</p></noscript></div></div>
 <script src="js/content.js"></script>
+<script src="js/rank.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

@@ -1,0 +1,15 @@
+{
+  "name": "CHAOS / DEVA",
+  "short_name": "CHAOS/DEVA",
+  "description": "Portfólio de Vitor Araújo em duas identidades: CHAOS e DEVA.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "lang": "pt-BR",
+  "background_color": "#050811",
+  "theme_color": "#050811",
+  "icons": [
+    { "src": "assets/icons/cd-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/icons/cd-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

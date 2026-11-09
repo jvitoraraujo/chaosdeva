@@ -1,14 +1,18 @@
+const ROLE = 'Software Architecture & Digital Crafts';
+
 /* Conteúdo editável. Textos em PT-BR e EN-US; projetos na lista PROJECTS. */
 window.AUTHOR = {
   name: 'Vitor Araújo',
   github: 'https://github.com/jvitoraraujo',
   linkedin: 'https://www.linkedin.com/in/vitor-ara%C3%BAjo-55a98942b',
-  email: 'vitoraraujo02@gmail.com'
+  email: ['vitoraraujo02', 'gmail.com'].join('@')
 };
 
-/* Projetos: importados ao vivo de github.com/<user> (API pública) e ranqueados por relevância.
+/* Projetos: importados de github.com/<user> e ranqueados por relevância (o mesmo script serve à Action e ao site).
    pin: nomes de repositórios sempre exibidos primeiro; exclude: nomes a ocultar. */
-window.GH = { user: 'jvitoraraujo', limit: 6, pin: [], exclude: ['chaosdeva', 'jvitoraraujo'] };
+window.GH = { user: 'jvitoraraujo', limit: 6, pin: [], exclude: ['chaosdeva', 'jvitoraraujo'],
+  source: 'data/projects.json', /* gerado todo dia pela Action (.github/workflows/projects.yml); sem ele, usa a API ao vivo */
+  covers: {} /* capa opcional por repositório. Ex.: { 'meu-repo': 'assets/covers/meu-repo.webp' } */ };
 
 /* Bio do "Sobre": preencha o que quiser; campos vazios não aparecem no site.
    Sugestões: highlights (3 a 4 frases curtas), stack, experience, education, interests, languages.
@@ -36,12 +40,12 @@ const TERM_DEVA = Object.assign({}, TERM, { termL4: '> PROTOCOL: Stellar_Cartogr
 
 window.I18N = {
   pt: {
-    langBtn: 'EN-US', navLabel: 'Principal', rights: '© CHAOS / DEVA - 2026. Todos os direitos reservados.',
+    langBtn: 'EN-US', langAria: 'Mudar idioma para inglês (EN-US)', skip: 'Pular para o conteúdo', top: 'Voltar ao topo', empty: 'Nenhum projeto público encontrado ainda.', navLabel: 'Principal', rights: '© CHAOS / DEVA - 2026. Todos os direitos reservados.',
     nav: { home: 'Home', projetos: 'Projetos', sobre: 'Sobre', marcas: 'Marcas' },
     gate: { sub: 'Duas identidades, um mesmo portfólio. Escolha o céu que deseja atravessar.', pick: 'Entrar' },
     title: { home: 'Home', projetos: 'Projetos', sobre: 'Sobre', marcas: 'Marcas' },
     chaos: {
-      role: 'Software Architecture & Digital Crafts',
+      role: ROLE,
       tagline: 'A massa informe onde os elementos repousam em eterno conflito.',
       lead: 'Código e arquitetura como imposição de lógica sobre o abismo. Sistemas construídos com precisão, a partir do que não tinha forma.',
       ...TERM,
@@ -51,8 +55,8 @@ window.I18N = {
       contactH: 'Inscrições', footer: 'C H A O S'
     },
     deva: {
-      role: 'Software Architecture & Digital Crafts',
-      tagline: 'Misticismo, dados e tecnologia.',
+      role: ROLE,
+      tagline: 'O céu resplandecente onde cada estrela encontra o seu lugar.',
       lead: 'Uma cartografia do conhecimento. Cada projeto é uma constelação dentro do mesmo céu: rigor de engenharia, execução precisa.',
       ...TERM_DEVA,
       projH: 'Projetos', projP: 'Cada projeto, uma constelação. Os registros completos estão no GitHub.',
@@ -77,12 +81,12 @@ window.I18N = {
     repo: 'Ver no GitHub'
   },
   en: {
-    langBtn: 'PT-BR', navLabel: 'Main', rights: '© CHAOS / DEVA - 2026. All rights reserved.',
+    langBtn: 'PT-BR', langAria: 'Switch language to Portuguese (PT-BR)', skip: 'Skip to content', top: 'Back to top', empty: 'No public projects found yet.', navLabel: 'Main', rights: '© CHAOS / DEVA - 2026. All rights reserved.',
     nav: { home: 'Home', projetos: 'Projects', sobre: 'About', marcas: 'Brands' },
     gate: { sub: 'Two identities, one portfolio. Choose the sky you wish to cross.', pick: 'Enter' },
     title: { home: 'Home', projetos: 'Projects', sobre: 'About', marcas: 'Brands' },
     chaos: {
-      role: 'Software Architecture & Digital Crafts',
+      role: ROLE,
       tagline: 'The formless mass where the elements rest in eternal conflict.',
       lead: 'Code and architecture as logic imposed upon the abyss. Systems built with precision, from what once had no form.',
       ...TERM,
@@ -92,8 +96,8 @@ window.I18N = {
       contactH: 'Inscriptions', footer: 'C H A O S'
     },
     deva: {
-      role: 'Software Architecture & Digital Crafts',
-      tagline: 'Mysticism, data and technology.',
+      role: ROLE,
+      tagline: 'The resplendent sky where every star finds its place.',
       lead: 'A cartography of knowledge. Each project is a constellation within the same sky: engineering rigor, precise execution.',
       ...TERM_DEVA,
       projH: 'Projects', projP: 'Each project, a constellation. Full records live on GitHub.',
