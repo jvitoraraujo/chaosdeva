@@ -21,7 +21,7 @@
   /* ---------- Blocos ---------- */
   const divider = (theme) => theme === 'deva' ? '<div class="div" aria-hidden="true">✦ . * . ⟡ . * . ✦</div>' : '<div class="div" aria-hidden="true">✦</div>';
   const emblem = (theme) => theme === 'chaos'
-    ? '<img src="assets/chaos-logo.svg" alt="CHAOS" width="260" height="371" decoding="async">' : '<img src="assets/deva-simbolo.svg" alt="DEVA" width="400" height="400" decoding="async">';
+    ? '<img src="assets/chaos-logo.svg" alt="CHAOS" width="260" height="371" decoding="async">' : '<img src="assets/deva-lockup-vertical.png" alt="DEVA" width="420" height="366" decoding="async">';
 
   function home(theme, t) {
     const c = t[theme], n = t.nav;
@@ -127,8 +127,8 @@
     return `<div class="gate"><button class="pill lang" id="lang" aria-label="Idioma / Language">${t.langBtn}</button>
       <h1>CHAOS / DEVA</h1><p>${esc(t.gate.sub)}</p>
       <div class="choices">
-        <button class="choice chaos" data-go="chaos"><img src="assets/chaos-simbolo.svg" alt=""><b>CHAOS</b><small>${esc(t.gate.pick)} →</small></button>
-        <button class="choice deva" data-go="deva"><img src="assets/deva-sigilo.svg" alt=""><b>DEVA</b><small>${esc(t.gate.pick)} →</small></button>
+        <button class="choice chaos" data-go="chaos"><img src="assets/chaos-simbolo.svg" alt=""><img class="wm" src="assets/chaos-wordmark.svg" alt="CHAOS" height="36"><small>${esc(t.gate.pick)} →</small></button>
+        <button class="choice deva" data-go="deva"><img src="assets/deva-simbolo.svg" alt=""><b>DEVA</b><small>${esc(t.gate.pick)} →</small></button>
       </div></div>`;
   }
 

@@ -211,3 +211,9 @@ main:focus{outline:none}
 
 /* Texto corrido justificado (hifenização automática pelo lang do <html> evita "rios" de espaço) */
 main p:not(.mono):not(.role):not(.tagline){text-align:justify;text-justify:inter-word;hyphens:auto;-webkit-hyphens:auto;hyphenate-limit-chars:10 5 4;overflow-wrap:break-word}
+
+.choice img.wm{height:36px;width:auto}.choice:hover img.wm{transform:none}
+[data-theme=deva] .emblem img{max-width:min(100%,420px);max-height:min(62vh,480px)}
+.choice b{display:flex;align-items:center;min-height:36px}
+
+.choice.deva b{font-size:1.85rem;line-height:1;font-weight:700}
