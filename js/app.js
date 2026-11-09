@@ -143,7 +143,7 @@
       <button class="pill switch" id="switch" aria-label="${theme.toUpperCase()} → ${other.toUpperCase()}">${theme.toUpperCase()} <i>⇄</i> ${other.toUpperCase()}</button>
       <button class="pill" id="lang" aria-label="Idioma / Language">${t.langBtn}</button></div></header>
       <main id="main" class="in">${views[page](theme, t)}</main>
-      <footer>${foot}<br><a href="${A.github}" target="_blank" rel="noopener">GitHub</a> · <a href="${A.linkedin}" target="_blank" rel="noopener">LinkedIn</a> · <a href="mailto:${A.email}">E-mail</a></footer>`;
+      <footer>${foot}<br>${esc(t.rights)}<br><a href="${A.github}" target="_blank" rel="noopener">GitHub</a> · <a href="${A.linkedin}" target="_blank" rel="noopener">LinkedIn</a> · <a href="mailto:${A.email}">E-mail</a></footer>`;
   }
 
   let current = null;

@@ -36,7 +36,7 @@ const TERM_DEVA = Object.assign({}, TERM, { termL4: '> PROTOCOL: Stellar_Cartogr
 
 window.I18N = {
   pt: {
-    langBtn: 'EN-US', navLabel: 'Principal',
+    langBtn: 'EN-US', navLabel: 'Principal', rights: '© CHAOS / DEVA - 2026. Todos os direitos reservados.',
     nav: { home: 'Home', projetos: 'Projetos', sobre: 'Sobre', marcas: 'Marcas' },
     gate: { sub: 'Duas identidades, um mesmo portfólio. Escolha o céu que deseja atravessar.', pick: 'Entrar' },
     title: { home: 'Home', projetos: 'Projetos', sobre: 'Sobre', marcas: 'Marcas' },
@@ -77,7 +77,7 @@ window.I18N = {
     repo: 'Ver no GitHub'
   },
   en: {
-    langBtn: 'PT-BR', navLabel: 'Main',
+    langBtn: 'PT-BR', navLabel: 'Main', rights: '© CHAOS / DEVA - 2026. All rights reserved.',
     nav: { home: 'Home', projetos: 'Projects', sobre: 'About', marcas: 'Brands' },
     gate: { sub: 'Two identities, one portfolio. Choose the sky you wish to cross.', pick: 'Enter' },
     title: { home: 'Home', projetos: 'Projects', sobre: 'About', marcas: 'Brands' },

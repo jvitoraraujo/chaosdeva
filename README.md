@@ -40,6 +40,7 @@ chaosdeva/
 │   ├── deva-simbolo.svg
 │   ├── deva-wordmark.svg
 │   └── icons/             # Favicons e ícones (de 16px a 1024px)
+├── LICENSE                # Direitos reservados
 ├── css/
 │   └── style.css          # Estilos globais e customizados
 └── js/
@@ -60,7 +61,9 @@ chaosdeva/
 
 ## 📄 Licença
 
-Este projeto está sob a licença desenvolvida para o ecossistema Chaos / Deva.
+© CHAOS / DEVA - 2026. Todos os direitos reservados.
+
+O código, os textos e as identidades visuais (logos, símbolos, wordmarks e ícones) deste repositório não podem ser copiados, modificados ou redistribuídos sem autorização expressa do autor. Veja o arquivo [`LICENSE`](LICENSE).
 
 ---
 
