@@ -93,7 +93,8 @@ h2.as-h3{padding:0;border:0}
 .sec{margin-top:28px}
 p{max-width:68ch}.muted{color:var(--muted)}
 .mono{font-family:var(--mono);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-.about p:not(.mono){text-align:justify;text-justify:inter-word;hyphens:auto;-webkit-hyphens:auto;overflow-wrap:break-word}
+/* Texto corrido justificado (hifenização automática pelo lang do <html> evita "rios" de espaço) */
+main p:not(.mono):not(.role):not(.tagline){text-align:justify;text-justify:inter-word;hyphens:auto;-webkit-hyphens:auto;hyphenate-limit-chars:10 5 4;overflow-wrap:break-word}
 
 /* Botões */
 .btn{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:.7rem 1.5rem;border-radius:2px;cursor:pointer;text-decoration:none;

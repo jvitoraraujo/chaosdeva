@@ -26,6 +26,15 @@ async function fetchAll() {
 }
 
 const repos = rankRepos(await fetchAll(), GH);
-mkdirSync(new URL('../data/', import.meta.url), { recursive: true });
-writeFileSync(new URL('../data/projects.json', import.meta.url), JSON.stringify({ generated: new Date().toISOString(), user: GH.user, repos }, null, 2) + '\n');
-console.log(`projects.json: ${repos.length} projeto(s) -> ${repos.map((r) => r.name).join(', ') || '(nenhum)'}`);
+const out = new URL('../data/projects.json', import.meta.url);
+
+// Só grava se algo mudou: evita um commit (e um novo deploy do Pages) por dia apenas por causa do horário.
+let previous = null;
+try { previous = JSON.parse(readFileSync(out, 'utf8')); } catch { /* primeira execução */ }
+if (previous && previous.generated && JSON.stringify(previous.repos) === JSON.stringify(repos)) {
+  console.log('projects.json: sem mudanças, nada a publicar.');
+} else {
+  mkdirSync(new URL('../data/', import.meta.url), { recursive: true });
+  writeFileSync(out, JSON.stringify({ generated: new Date().toISOString(), user: GH.user, repos }, null, 2) + '\n');
+  console.log(`projects.json: ${repos.length} projeto(s) -> ${repos.map((r) => r.name).join(', ') || '(nenhum)'}`);
+}

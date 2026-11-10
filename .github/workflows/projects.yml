@@ -8,6 +8,9 @@ on:
     paths: ['js/content.js', 'js/rank.js', 'scripts/**']
 permissions:
   contents: write
+concurrency:
+  group: atualizar-projetos      # duas execuções seguidas não disputam o push
+  cancel-in-progress: false
 jobs:
   build:
     runs-on: ubuntu-latest
