@@ -7,8 +7,24 @@ from playwright.sync_api import sync_playwright
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 ROUTES = ['#/'] + [f'#/{t}/{p}' for t in ('chaos', 'deva') for p in ('home', 'projetos', 'sobre', 'marcas')]
 VIEWS = [('desktop', {'width': 1280, 'height': 800}), ('celular', {'width': 390, 'height': 800})]
-MOCK = [{'name': 'exemplo', 'description': 'Projeto de teste', 'language': 'Python', 'topics': [], 'stargazers_count': 1, 'forks_count': 0,
-         'fork': False, 'archived': False, 'html_url': 'https://github.com/x/y', 'homepage': '', 'pushed_at': '2026-10-01T00:00:00Z'}]
+STATIC = {'generated': '2026-01-01T00:00:00Z', 'user': 'x', 'repos': [
+    {'name': 'exemplo-estatico', 'description': 'Projeto de teste', 'language': 'Python', 'topics': [], 'stargazers_count': 1,
+     'forks_count': 0, 'html_url': 'https://github.com/x/y', 'homepage': '', 'pushed_at': '2026-10-01T00:00:00Z'}]}
+API = [{'name': 'exemplo-api', 'description': 'Projeto de teste', 'language': 'Python', 'topics': [], 'stargazers_count': 1, 'forks_count': 0,
+        'fork': False, 'archived': False, 'html_url': 'https://github.com/x/y', 'homepage': '', 'pushed_at': '2026-10-01T00:00:00Z'}]
+
+def fulfill_json(body, status=200):
+    return lambda r: r.fulfill(status=status, content_type='application/json', body=json.dumps(body))
+
+def new_context(browser, vp, lang, static=STATIC):
+    """Contexto isolado da internet e dos dados reais: o teste não depende do conteúdo do repositório."""
+    ctx = browser.new_context(viewport=vp)
+    ctx.add_init_script(f"try{{localStorage.setItem('cd-lang','{lang}')}}catch(e){{}}")
+    ctx.route('https://fonts.googleapis.com/**', lambda r: r.fulfill(status=200, content_type='text/css', body=''))
+    ctx.route('https://fonts.gstatic.com/**', lambda r: r.abort())
+    ctx.route('https://api.github.com/**', fulfill_json(API))
+    ctx.route('**/data/projects.json', fulfill_json(static) if static else (lambda r: r.fulfill(status=404, body='')))
+    return ctx
 
 class Quiet(http.server.SimpleHTTPRequestHandler):
     def log_message(self, *a): pass
@@ -17,16 +33,12 @@ def main():
     srv = socketserver.TCPServer(('127.0.0.1', 0), functools.partial(Quiet, directory=str(ROOT)))
     threading.Thread(target=srv.serve_forever, daemon=True).start()
     base = f'http://127.0.0.1:{srv.server_address[1]}/index.html'
-    fails = []
+    fails = []; extra = 0
     with sync_playwright() as p:
         browser = p.chromium.launch()
         for vname, vp in VIEWS:
             for lang in ('pt', 'en'):
-                ctx = browser.new_context(viewport=vp)
-                ctx.add_init_script(f"try{{localStorage.setItem('cd-lang','{lang}')}}catch(e){{}}")
-                ctx.route('https://fonts.googleapis.com/**', lambda r: r.fulfill(status=200, content_type='text/css', body=''))
-                ctx.route('https://fonts.gstatic.com/**', lambda r: r.abort())
-                ctx.route('https://api.github.com/**', lambda r: r.fulfill(status=200, content_type='application/json', body=json.dumps(MOCK)))
+                ctx = new_context(browser, vp, lang)
                 page = ctx.new_page(); errs = []
                 page.on('pageerror', lambda e: errs.append(str(e)))
                 for route in ROUTES:
@@ -39,12 +51,21 @@ def main():
                     if not h1: fails.append(f'{tag}: sem título (h1 vazio)')
                     if broken: fails.append(f'{tag}: imagem quebrada: {broken[0]}')
                     if overflow: fails.append(f'{tag}: rolagem horizontal')
-                    if route.endswith('projetos') and 'exemplo' not in page.inner_text('#repos').lower() and 'example' not in page.inner_text('#repos').lower():
-                        fails.append(f'{tag}: projetos não carregaram')
+                    if route.endswith('projetos') and 'exemplo-estatico' not in page.inner_text('#repos').lower():
+                        fails.append(f'{tag}: projetos (arquivo estático) não carregaram')
                 ctx.close()
+        # Cenários extras de projetos (desktop, PT): reserva pela API do GitHub e lista vazia
+        for nome, static, esperado in (('reserva pela API', None, 'exemplo-api'),
+                                       ('lista vazia', {'generated': '2026-01-01T00:00:00Z', 'repos': []}, 'nenhum projeto público')):
+            ctx = new_context(browser, VIEWS[0][1], 'pt', static); page = ctx.new_page(); errs = []
+            page.on('pageerror', lambda e: errs.append(str(e)))
+            page.goto(base + '#/deva/projetos'); page.wait_for_timeout(1000)
+            if esperado not in page.inner_text('#repos').lower(): fails.append(f'projetos ({nome}): esperado "{esperado}"')
+            if errs: fails.append(f'projetos ({nome}): erro de JS: {errs[0]}')
+            ctx.close(); extra += 1
         browser.close()
     srv.shutdown()
-    total = len(ROUTES) * len(VIEWS) * 2
+    total = len(ROUTES) * len(VIEWS) * 2 + extra
     if fails:
         print(f'FALHOU ({len(fails)} problema(s) em {total} verificações):'); [print(' -', f) for f in fails]; sys.exit(1)
     print(f'OK: {total} verificações sem problemas.')
