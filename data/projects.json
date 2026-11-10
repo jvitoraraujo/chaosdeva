@@ -1,12 +1,15 @@
 {
-  "generated": "2026-11-09T22:03:55.244Z",
+  "generated": "2026-11-10T14:55:12.313Z",
   "user": "jvitoraraujo",
   "repos": [
     {
       "name": "SakuraPlanet",
       "description": "Projeto de fanblog atulizado (2026)",
       "language": null,
-      "topics": [],
+      "topics": [
+        "html",
+        "html-css"
+      ],
       "stargazers_count": 0,
       "forks_count": 0,
       "html_url": "https://github.com/jvitoraraujo/SakuraPlanet",
@@ -26,7 +29,7 @@
     },
     {
       "name": "ArcanumVitae",
-      "description": "Jogo de tabuleiro híbrido (físico/digital) desenvolvido em Flutter, inspirado nos 22 Arcanos Maiores do Tarô e na Árvore da Vida da Cabala.",
+      "description": "Jogo de tabuleiro híbrido (físico/digital), inspirado nos 22 Arcanos Maiores do Tarô e na Árvore da Vida da Cabala.",
       "language": "C++",
       "topics": [],
       "stargazers_count": 0,
