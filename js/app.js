@@ -37,23 +37,42 @@
     </div><div class="emblem">${emblem(theme)}</div></section>`;
   }
 
-  /* Projetos: arquivo estático gerado pela Action (rápido, sem limite) com API do GitHub como reserva */
-  let repos = null, repoErr = false;
-  async function fetchJSON(url, ms) {
+  /* Projetos: o arquivo estático (gerado pela Action) aparece na hora; em segundo plano o site confere o GitHub
+     e, se algo mudou (descrição, estrelas, projeto novo), atualiza os cards sem recarregar. */
+  let repos = null, repoErr = false, liveTried = 0;
+  const LIVE_TTL = 18e5;                                   /* 30 min: no máximo 1 consulta à API por navegador */
+  async function fetchJSON(url, ms, cache) {
     const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), ms);
     try {
-      const res = await fetch(url, { signal: ctl.signal, headers: { Accept: 'application/json' } });
+      const res = await fetch(url, { signal: ctl.signal, cache: cache || 'default', headers: { Accept: 'application/json' } });
       if (!res.ok) throw new Error(res.status);
       return await res.json();
     } finally { clearTimeout(to); }
   }
+  const readLive = () => { try { const c = JSON.parse(localStorage.getItem('cd-repos') || 'null'); return c && Date.now() - c.t < LIVE_TTL ? c.d : null; } catch (e) { return null; } };
+  const saveLive = (d) => { try { localStorage.setItem('cd-repos', JSON.stringify({ t: Date.now(), d })); } catch (e) {} };
+  const fetchLive = async () => window.rankRepos(await fetchJSON(`https://api.github.com/users/${GH.user}/repos?per_page=100&sort=pushed`, 8000), GH);
+
   async function loadRepos() {
     if (repos) return;
-    try { const d = await fetchJSON(GH.source, 6000); if (d && d.generated && Array.isArray(d.repos)) { repos = d.repos; return; } } catch (e) {}
-    try { const c = JSON.parse(localStorage.getItem('cd-repos') || 'null'); if (c && Date.now() - c.t < 18e5) { repos = c.d; return; } } catch (e) {}
-    const all = await fetchJSON(`https://api.github.com/users/${GH.user}/repos?per_page=100&sort=pushed`, 8000);
-    repos = window.rankRepos(all, GH);
-    try { localStorage.setItem('cd-repos', JSON.stringify({ t: Date.now(), d: repos })); } catch (e) {}
+    const live = readLive();
+    if (live) { repos = live; return; }                    /* consulta ao vivo recente: é a mais atual */
+    try {                                                  /* revalida com o servidor (nunca usa cópia velha do navegador) */
+      const d = await fetchJSON(GH.source, 6000, 'no-cache');
+      if (d && d.generated && Array.isArray(d.repos)) { repos = d.repos; return; }
+    } catch (e) {}
+    repos = await fetchLive(); saveLive(repos);            /* sem arquivo estático: usa a API direto */
+  }
+  async function refreshLive(t) {
+    if (readLive() || Date.now() - liveTried < 3e5) return; /* já está fresco, ou tentou há menos de 5 min (limite de taxa) */
+    liveTried = Date.now();
+    try {
+      const fresh = await fetchLive();
+      saveLive(fresh);
+      if (fresh.length && JSON.stringify(fresh) !== JSON.stringify(repos)) {
+        repos = fresh; const box = $('#repos'); if (box) box.innerHTML = reposHTML(t);
+      }
+    } catch (e) { /* sem rede ou limite da API: mantém o que já está na tela */ }
   }
   const repoCard = (r, t) => {
     const tags = [r.language, ...(r.topics || [])].filter(Boolean).map((x) => `<span class="tag">${esc(x)}</span>`).join('');
@@ -71,6 +90,7 @@
   async function fillRepos(t) {
     try { await loadRepos(); repoErr = false; } catch (e) { repoErr = true; }
     const box = $('#repos'); if (box) box.innerHTML = reposHTML(t);
+    if (!repoErr) refreshLive(t);
   }
   function projetos(theme, t) {
     const c = t[theme];

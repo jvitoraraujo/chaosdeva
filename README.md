@@ -39,7 +39,7 @@ Mesmo conteúdo, duas estéticas, dois idiomas (PT-BR / EN-US) e um portal de se
 | Bio extra (stack, trajetória, formação…) | Objeto `PROFILE` em `js/content.js`; campos vazios não aparecem |
 | Aparência | `css/style.css` |
 
-**Projetos:** o site lê `data/projects.json` (rápido, sem limite de requisições). Se o arquivo ainda não foi gerado, usa a API pública do GitHub como reserva, com cache de 30 minutos.
+**Projetos:** o site mostra na hora o `data/projects.json` (gerado pela Action a cada 3 horas, só gera commit se algo mudou) e, em segundo plano, confere a API pública do GitHub (no máximo 1 consulta a cada 30 minutos por navegador). Se descrição, estrelas ou projetos mudaram, os cards se atualizam sozinhos, sem esperar a Action. Se a API estiver indisponível, fica o que já está na tela.
 
 ## Testes
 
