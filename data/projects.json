@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-10T14:55:12.313Z",
+  "generated": "2026-11-11T10:50:27.341Z",
   "user": "jvitoraraujo",
   "repos": [
     {
@@ -15,6 +15,17 @@
       "html_url": "https://github.com/jvitoraraujo/SakuraPlanet",
       "homepage": "https://sakuraplanetscc.blogspot.com/",
       "pushed_at": "2026-11-08T21:28:55Z"
+    },
+    {
+      "name": "ATANOR",
+      "description": "Aplicação mobile de leitor de ebooks, com conversão de PDF->EPUB in app.",
+      "language": "JavaScript",
+      "topics": [],
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "html_url": "https://github.com/jvitoraraujo/ATANOR",
+      "homepage": null,
+      "pushed_at": "2026-11-11T04:06:13Z"
     },
     {
       "name": "PD26.1-TB2",
