@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-11T10:50:27.341Z",
+  "generated": "2026-11-12T02:14:44.881Z",
   "user": "jvitoraraujo",
   "repos": [
     {
@@ -15,6 +15,17 @@
       "html_url": "https://github.com/jvitoraraujo/SakuraPlanet",
       "homepage": "https://sakuraplanetscc.blogspot.com/",
       "pushed_at": "2026-11-08T21:28:55Z"
+    },
+    {
+      "name": "Deva-PDF2EPUB",
+      "description": "Ferramenta voltada para a conversão de arquivos PDF em formato EPUB: Layout fluido · sem hifenização de quebra de linha · OCR · revisão opcional por IA",
+      "language": "JavaScript",
+      "topics": [],
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "html_url": "https://github.com/jvitoraraujo/Deva-PDF2EPUB",
+      "homepage": "",
+      "pushed_at": "2026-11-11T22:19:55Z"
     },
     {
       "name": "ATANOR",
@@ -48,17 +59,6 @@
       "html_url": "https://github.com/jvitoraraujo/ArcanumVitae",
       "homepage": "",
       "pushed_at": "2026-11-08T15:58:43Z"
-    },
-    {
-      "name": "Deva-PDF2EPUB",
-      "description": "Ferramenta voltada para a conversão de arquivos PDF em formato EPUB: Layout fluido · sem hifenização de quebra de linha · OCR · revisão opcional por IA",
-      "language": "JavaScript",
-      "topics": [],
-      "stargazers_count": 0,
-      "forks_count": 0,
-      "html_url": "https://github.com/jvitoraraujo/Deva-PDF2EPUB",
-      "homepage": "",
-      "pushed_at": "2026-11-06T18:43:58Z"
     }
   ]
 }
