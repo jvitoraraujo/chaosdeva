@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-12T02:14:44.881Z",
+  "generated": "2026-11-16T19:33:43.215Z",
   "user": "jvitoraraujo",
   "repos": [
     {
@@ -17,6 +17,17 @@
       "pushed_at": "2026-11-08T21:28:55Z"
     },
     {
+      "name": "ATANOR",
+      "description": "Aplicação mobile de leitor de ebooks, com conversão de PDF->EPUB in app.",
+      "language": "JavaScript",
+      "topics": [],
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "html_url": "https://github.com/jvitoraraujo/ATANOR",
+      "homepage": null,
+      "pushed_at": "2026-11-16T16:43:21Z"
+    },
+    {
       "name": "Deva-PDF2EPUB",
       "description": "Ferramenta voltada para a conversão de arquivos PDF em formato EPUB: Layout fluido · sem hifenização de quebra de linha · OCR · revisão opcional por IA",
       "language": "JavaScript",
@@ -26,17 +37,6 @@
       "html_url": "https://github.com/jvitoraraujo/Deva-PDF2EPUB",
       "homepage": "",
       "pushed_at": "2026-11-11T22:19:55Z"
-    },
-    {
-      "name": "ATANOR",
-      "description": "Aplicação mobile de leitor de ebooks, com conversão de PDF->EPUB in app.",
-      "language": "JavaScript",
-      "topics": [],
-      "stargazers_count": 0,
-      "forks_count": 0,
-      "html_url": "https://github.com/jvitoraraujo/ATANOR",
-      "homepage": null,
-      "pushed_at": "2026-11-11T04:06:13Z"
     },
     {
       "name": "PD26.1-TB2",
