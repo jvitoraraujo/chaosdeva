@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-21T10:56:51.159Z",
+  "generated": "2026-11-22T19:32:40.039Z",
   "user": "jvitoraraujo",
   "repos": [
     {
@@ -15,6 +15,17 @@
       "html_url": "https://github.com/jvitoraraujo/SakuraPlanet",
       "homepage": "https://sakuraplanetscc.blogspot.com/",
       "pushed_at": "2026-11-08T21:28:55Z"
+    },
+    {
+      "name": "manual-de-tarot",
+      "description": "Manual de Tarot em pagina dinamica HTML.",
+      "language": "HTML",
+      "topics": [],
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "html_url": "https://github.com/jvitoraraujo/manual-de-tarot",
+      "homepage": null,
+      "pushed_at": "2026-11-22T12:56:58Z"
     },
     {
       "name": "Deva-PDF2EPUB",
