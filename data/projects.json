@@ -1,7 +1,18 @@
 {
-  "generated": "2026-11-23T01:39:46.104Z",
+  "generated": "2026-11-24T02:10:50.603Z",
   "user": "jvitoraraujo",
   "repos": [
+    {
+      "name": "manual-de-tarot",
+      "description": "Manual de Tarot em pagina dinamica HTML.",
+      "language": "HTML",
+      "topics": [],
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "html_url": "https://github.com/jvitoraraujo/manual-de-tarot",
+      "homepage": "https://jvitoraraujo.github.io/manual-de-tarot/",
+      "pushed_at": "2026-11-22T22:07:24Z"
+    },
     {
       "name": "SakuraPlanet",
       "description": "Projeto de fanblog atulizado (2026)",
@@ -17,15 +28,15 @@
       "pushed_at": "2026-11-08T21:28:55Z"
     },
     {
-      "name": "manual-de-tarot",
-      "description": "Manual de Tarot em pagina dinamica HTML.",
-      "language": "HTML",
+      "name": "ATANOR",
+      "description": "Aplicação mobile de leitor de ebooks, com conversão de PDF->EPUB in app.",
+      "language": "JavaScript",
       "topics": [],
       "stargazers_count": 0,
       "forks_count": 0,
-      "html_url": "https://github.com/jvitoraraujo/manual-de-tarot",
+      "html_url": "https://github.com/jvitoraraujo/ATANOR",
       "homepage": null,
-      "pushed_at": "2026-11-22T22:07:24Z"
+      "pushed_at": "2026-11-24T00:40:59Z"
     },
     {
       "name": "Deva-PDF2EPUB",
@@ -37,17 +48,6 @@
       "html_url": "https://github.com/jvitoraraujo/Deva-PDF2EPUB",
       "homepage": "",
       "pushed_at": "2026-11-21T03:24:15Z"
-    },
-    {
-      "name": "ATANOR",
-      "description": "Aplicação mobile de leitor de ebooks, com conversão de PDF->EPUB in app.",
-      "language": "JavaScript",
-      "topics": [],
-      "stargazers_count": 0,
-      "forks_count": 0,
-      "html_url": "https://github.com/jvitoraraujo/ATANOR",
-      "homepage": null,
-      "pushed_at": "2026-11-17T13:36:46Z"
     },
     {
       "name": "PD26.1-TB2",
